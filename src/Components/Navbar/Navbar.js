@@ -6,7 +6,7 @@ const Navbar = () => (
   <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-20">
     {/* Logo and Links */}
     <div className="flex items-center space-x-6">
-      <h1 className="text-2xl font-bold text-indigo-600">Buymor</h1>
+      <h1 className="text-2xl font-bold text-indigo-600"><Link href={"/"}>Buymor</Link></h1>
       <Link href="/men" className="text-gray-700 hover:text-indigo-600">
         Men
       </Link>
@@ -23,9 +23,9 @@ const Navbar = () => (
       <Link href="/cart" className="text-gray-700 hover:text-indigo-600">
         <BsBucket size={"20px"} />
       </Link>
-      <button className="bg-transparent text-black px-4 py-2 rounded-md ">
+      <Link href="/login" className="bg-transparent text-black px-4 py-2 rounded-md ">
         Login
-      </button>
+      </Link>
     </div>
   </nav>
 );
