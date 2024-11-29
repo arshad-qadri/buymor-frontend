@@ -1,5 +1,6 @@
 import Footer from "@/Components/Footer";
 import Navbar from "@/Components/Navbar/Navbar";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 
 // Simulate a database or API call
@@ -39,7 +40,9 @@ const ProductDetail = ({ params }) => {
   return (
     <main className="max-w-4xl mx-auto px-6 py-8">
       <div className="flex flex-col lg:flex-row gap-6">
-        <img
+        <Image
+        width={250}
+        height={200}
           src={product.image}
           alt={product.name}
           className="w-full lg:w-1/2 rounded-lg"

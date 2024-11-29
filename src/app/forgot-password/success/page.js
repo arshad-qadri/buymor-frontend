@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const ForgotPasswordSuccessPage = () => {
@@ -8,12 +9,14 @@ const ForgotPasswordSuccessPage = () => {
           Check Your Email
         </h1>
         <p className="text-center text-gray-700 mb-4">
-          We've sent a password reset link to your email address. Follow the link to reset your password.
+          We&apos;ve sent a password reset link to your email address. Follow the link to reset your password.
         </p>
 
         {/* Illustration (Optional) */}
         <div className="flex justify-center mb-6">
-          <img
+          <Image
+          width={192}
+          height={192}
             src="/email-sent.png" // Replace with an illustration/image of your choice
             alt="Email Sent Illustration"
             className="w-48 h-48"
@@ -29,7 +32,7 @@ const ForgotPasswordSuccessPage = () => {
 
         {/* Resend Email Option */}
         <p className="text-center text-sm text-gray-600 mt-4">
-          Didn't receive the email?{" "}
+          Didn&apos;t receive the email?{" "}
           <Link
             href="/forgot-password"
             className="text-indigo-600 font-medium hover:underline"

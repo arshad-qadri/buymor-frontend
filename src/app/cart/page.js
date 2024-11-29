@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 const CartPage = () => {
@@ -56,7 +58,9 @@ const CartPage = () => {
                 key={item.id}
                 className="flex items-center gap-4 bg-white p-4 rounded-lg shadow-md mb-4"
               >
-                <img
+                <Image
+                  width={92}
+                  height={92}
                   src={item.image}
                   alt={item.name}
                   className="w-24 h-24 object-cover rounded"
@@ -119,9 +123,9 @@ const CartPage = () => {
       ) : (
         <p className="text-center text-gray-700">
           Your cart is empty.{" "}
-          <a href="/" className="text-indigo-600 hover:underline">
+          <Link href="/" className="text-indigo-600 hover:underline">
             Continue Shopping
-          </a>
+          </Link>
         </p>
       )}
     </div>
