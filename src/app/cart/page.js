@@ -1,11 +1,13 @@
 "use client";
 
+import AddNewAddressModal from "@/Components/modals/AddNewAddress";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
 const CartPage = () => {
-  // Example cart items (You can replace this with data from a global store like Redux or Context API)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(1);
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
@@ -25,7 +27,15 @@ const CartPage = () => {
     },
   ]);
 
-  // Function to handle quantity change
+  const [step, setStep] = useState(1);
+
+ 
+
+  const totalPrice = cartItems.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+
   const updateQuantity = (id, newQuantity) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
@@ -34,24 +44,151 @@ const CartPage = () => {
     );
   };
 
-  // Function to handle item removal
   const removeItem = (id) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
-  // Calculate total price
-  const totalPrice = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
+ 
+
+  const renderCartSummary = () => (
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-xl font-bold mb-4">Order Summary</h2>
+      <div className="flex justify-between mb-2">
+        <span>Subtotal</span>
+        <span>₹{totalPrice}</span>
+      </div>
+      <div className="flex justify-between mb-4">
+        <span>Shipping</span>
+        <span>Free</span>
+      </div>
+      <hr />
+      <div className="flex justify-between font-bold text-lg mt-4">
+        <span>Total</span>
+        <span>₹{totalPrice}</span>
+      </div>
+    </div>
+  );
+
+  const renderAddress = () => {
+    const addresses = [
+      {
+        id: 1,
+        country: "India",
+        fullName: "John Doe",
+        mobile: "1234567890",
+        pincode: "123456",
+        flat: "Flat 101",
+        area: "Main Street",
+        landmark: "Near Park",
+        city: "Mumbai",
+        state: "Maharashtra",
+      },
+      {
+        id: 2,
+        country: "India",
+        fullName: "Jane Smith",
+        mobile: "9876543210",
+        pincode: "654321",
+        flat: "Flat 202",
+        area: "Baker Street",
+        landmark: "Opposite Mall",
+        city: "Pune",
+        state: "Maharashtra",
+      },
+    ];
+  
+    const handleAddAddress = (newAddress) => {
+      console.log("Address Added:", newAddress);
+      // Handle the new address as required (send to an API, update the UI, etc.)
+    };
+  
+    const handleAddressSelect = (addressId) => {
+      setSelectedAddress(addressId);
+    };
+  
+    return (
+      <div className="lg:col-span-2 bg-white rounded-lg p-4 shadow-md">
+        <h2 className="text-xl font-bold mb-4">Shipping Address</h2>
+  
+        <div className=" mb-4 flex justify-start items-center gap-x-2 flex-wrap">
+          {addresses.map((address) => (
+            <div key={address.id} className="flex items-center border p-2 rounded-lg">
+              <input
+                type="radio"
+                checked={selectedAddress === address.id}
+                onChange={() => handleAddressSelect(address.id)}
+                className="mr-2 scale-110"
+              />
+              <div >
+                <p>{address.fullName}</p>
+                <p>{address.flat}, {address.area}</p>
+                <p>{address.city}, {address.state} - {address.pincode}</p>
+                <p>{address.mobile}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+  
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="text-indigo-600  p-2 rounded"
+        >
+          Add New Address
+        </button> <br />
+        <button
+        onClick={() => setStep(3)}
+        className="mt-4 bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
+      >
+        Proceed to Payment
+      </button>
+        <AddNewAddressModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onAddAddress={handleAddAddress}
+        />
+      </div>
+    );
+  };
+
+  const renderPayment = () => (
+    <div className="lg:col-span-2 bg-white rounded-lg p-4 shadow-md">
+      <h2 className="text-xl font-bold mb-4">Payment Method</h2>
+      <div className="space-y-4">
+        <label className="flex items-center">
+          <input
+            type="radio"
+            name="payment"
+            value="cash"
+            defaultChecked
+            className="mr-2"
+          />
+          Cash on Delivery
+        </label>
+      </div>
+      <button
+        onClick={() => setStep(4)}
+        className="mt-4 bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
+      >
+        Place Order
+      </button>
+    </div>
+  );
+
+  const renderOrderSuccess = () => (
+    <div className="lg:col-span-2 flex justify-center items-center flex-col bg-white rounded-lg p-4 shadow-md">
+      <h2 className="text-2xl font-bold text-green-600">
+        Order Placed Successfully!
+      </h2>
+      <p className="mt-2">Thank you for shopping with us.</p>
+      <Link href={"/"} className="bg-indigo-600 text-white px-3 py-2 rounded-md shadow-md mt-3">Continue Shopping</Link>
+    </div>
   );
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <h1 className="text-2xl font-bold text-indigo-600 mb-4">Your Cart</h1>
-
-      {cartItems.length > 0 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Cart Items */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {step === 1 && (
           <div className="lg:col-span-2">
             {cartItems.map((item) => (
               <div
@@ -95,39 +232,22 @@ const CartPage = () => {
               </div>
             ))}
           </div>
-
-          {/* Cart Summary */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold mb-4">Order Summary</h2>
-            <div className="flex justify-between mb-2">
-              <span>Subtotal</span>
-              <span>₹{totalPrice}</span>
-            </div>
-            <div className="flex justify-between mb-4">
-              <span>Shipping</span>
-              <span>Free</span>
-            </div>
-            <hr />
-            <div className="flex justify-between font-bold text-lg mt-4">
-              <span>Total</span>
-              <span>₹{totalPrice}</span>
-            </div>
+        )}
+        <div>
+          {renderCartSummary()}
+          {step === 1 && (
             <button
-              onClick={() => alert("Proceeding to checkout...")}
-              className="w-full mt-4 bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700"
+              onClick={() => setStep(2)}
+              className="mt-4 w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
             >
-              Proceed to Checkout
+              Checkout
             </button>
-          </div>
+          )}
         </div>
-      ) : (
-        <p className="text-center text-gray-700">
-          Your cart is empty.{" "}
-          <Link href="/" className="text-indigo-600 hover:underline">
-            Continue Shopping
-          </Link>
-        </p>
-      )}
+        {step === 2 && renderAddress()}
+        {step === 3 && renderPayment()}
+        {step === 4 && renderOrderSuccess()}
+      </div>
     </div>
   );
 };
