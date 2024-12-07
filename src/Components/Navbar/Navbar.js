@@ -7,10 +7,10 @@ const Navbar = () => (
     {/* Logo and Links */}
     <div className="flex items-center space-x-6">
       <h1 className="text-2xl font-bold text-indigo-600"><Link href={"/"}>Buymor</Link></h1>
-      <Link href="/men" className="text-gray-700 hover:text-indigo-600">
+      <Link href="/shop?category=men" className="text-gray-700 hover:text-indigo-600">
         Men
       </Link>
-      <Link href="/women" className="text-gray-700 hover:text-indigo-600">
+      <Link href="/shop?category=women" className="text-gray-700 hover:text-indigo-600">
         Women
       </Link>
     </div>
