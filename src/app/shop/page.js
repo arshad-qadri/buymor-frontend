@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 const ShopPage = () => {
@@ -162,7 +163,9 @@ const ShopPage = () => {
               key={product.id}
               className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg"
             >
-              <img
+              <Image
+              width={192}
+              height={192}
                 src={product.image}
                 alt={product.name}
                 className="w-full h-48 object-cover rounded"
