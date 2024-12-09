@@ -12,7 +12,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // `null` means not logged in
   const [loading, setLoading] = useState(true);
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -36,15 +36,12 @@ export const AuthProvider = ({ children }) => {
     if (document.cookie.replace("authToken=", "")) fetchUser(); // Fetch user on app load
   }, []);
 
-  const login = async ( email, password) => {
+  const login = async (email, password) => {
     try {
-      const response = await axios.post(
-       `${baseUrl}/auth/login`,
-        {
-          email,
-          password,
-        }
-      );
+      const response = await axios.post(`${baseUrl}/auth/login`, {
+        email,
+        password,
+      });
 
       if (response.status === 200) {
         const { token } = response.data;
@@ -73,7 +70,13 @@ export const AuthProvider = ({ children }) => {
     setLoading
   ) => {
     try {
-      await axios.post(`${baseUrl}/auth/register`, formData);
+      const fData = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        mobileNumber: formData.phone
+      };
+      await axios.post(`${baseUrl}/auth/register`, fData);
 
       setSuccessMessage(
         "Account created successfully! Please verify your email."
@@ -85,7 +88,7 @@ export const AuthProvider = ({ children }) => {
         password: "",
         confirmPassword: "",
       });
-      router.push("/login")
+      router.push("/login");
     } catch (error) {
       const errorResponse =
         error?.response?.data?.message ||
@@ -95,16 +98,15 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   };
-  const logout = async(setIsLoggedIn) => {
+  const logout = async (setIsLoggedIn) => {
     try {
-      await axios.post(`${baseUrl}/auth/logout`)
+      await axios.post(`${baseUrl}/auth/logout`);
       document.cookie = "authToken=; Max-Age=0; path=/;"; // Clear auth token
       setIsLoggedIn(false); // Update state
       window.location.href = "/login"; // Redirect to login page
       setUser(null); // Clear user data on logout
     } catch (error) {
       console.log("error while logout", error);
-      
     }
   };
 
