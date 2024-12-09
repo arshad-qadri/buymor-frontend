@@ -1,17 +1,24 @@
-"use client"
+"use client";
+
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 
 const LoginPage = () => {
-  const handleLogin = (e) => {
+  const { login } = useAuth();
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log("Login form submitted");
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    login(email, password);
   };
 
   return (
     <div className="flex items-center justify-center min-h-[80vh] bg-gray-100">
       <div className="w-full max-w-md bg-white shadow-md rounded-lg p-6">
-        <h1 className="text-2xl font-bold text-center text-indigo-600 mb-6">Buymor Login</h1>
+        <h1 className="text-2xl font-bold text-center text-indigo-600 mb-6">
+          Buymor Login
+        </h1>
         <form onSubmit={handleLogin}>
           {/* Email Input */}
           <div className="mb-4">
@@ -30,7 +37,10 @@ const LoginPage = () => {
 
           {/* Password Input */}
           <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-700 font-medium">
+            <label
+              htmlFor="password"
+              className="block text-gray-700 font-medium"
+            >
               Password
             </label>
             <input
@@ -45,7 +55,10 @@ const LoginPage = () => {
 
           {/* Forgot Password */}
           <div className="text-right mb-4">
-            <Link href="/forgot-password" className="text-sm text-indigo-600 hover:underline">
+            <Link
+              href="/forgot-password"
+              className="text-sm text-indigo-600 hover:underline"
+            >
               Forgot Password?
             </Link>
           </div>
@@ -65,7 +78,10 @@ const LoginPage = () => {
         {/* Sign Up Link */}
         <p className="text-center text-sm text-gray-600 mt-4">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="text-indigo-600 font-medium hover:underline">
+          <Link
+            href="/register"
+            className="text-indigo-600 font-medium hover:underline"
+          >
             Sign Up
           </Link>
         </p>

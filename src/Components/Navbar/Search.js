@@ -21,8 +21,8 @@ const Search = ({}) => {
       
   },[searchParams])
   return (
-    <form className="flex-grow mx-4" onSubmit={handleSubmit}>
-      <div className="relative  w-[500px]   border border-gray-300 rounded-md">
+    <form className=" mx-4 hidden md:block" onSubmit={handleSubmit}>
+      <div className="relative  lg:w-[500px] md:w-[300px]   border border-red-300 rounded-md">
         <input
           onChange={(e) => setSearch(e.target.value)}
           type="text"
