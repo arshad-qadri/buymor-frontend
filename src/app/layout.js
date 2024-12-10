@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
       >
         <AuthProvider>
         <Navbar />
-          <div className="min-h-[82vh] py-4">{children}</div>
+          <div className="min-h-[82vh]">{children}</div>
         </AuthProvider>
         <Footer />
       </body>

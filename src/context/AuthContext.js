@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // `null` means not logged in
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const [error, setError ] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -28,6 +29,7 @@ export const AuthProvider = ({ children }) => {
         setUser(response.data?.data); // Save user data
       } catch (error) {
         console.log("Failed to fetch user:", error.stack);
+        setError(error.message);
         setUser(null); // Reset user if not authenticated
       } finally {
         setLoading(false); // Stop the loading state
@@ -74,7 +76,7 @@ export const AuthProvider = ({ children }) => {
         name: formData.name,
         email: formData.email,
         password: formData.password,
-        mobileNumber: formData.phone
+        mobileNumber: formData.phone,
       };
       await axios.post(`${baseUrl}/auth/register`, fData);
 
@@ -111,7 +113,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, register }}>
+    <AuthContext.Provider
+      value={{ user, loading, error, login, logout, register }}
+    >
       {children}
     </AuthContext.Provider>
   );
