@@ -59,9 +59,13 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.log("Error during login:", error);
+      
       alert(
         error.response?.data?.message || "An error occurred. Please try again."
       );
+      if(error.response?.data?.token){
+        location.href = `/verify-mobile-number/${error.response?.data?.token}`
+      }
     }
   };
   const register = async (
