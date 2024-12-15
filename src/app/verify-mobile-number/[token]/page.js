@@ -40,7 +40,7 @@ const OTPVerificationPage = () => {
       if (params.token) {
         callApi()
       }
-  },[])
+  },[callApi])
   // Refs for each OTP input field to manage focus
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
@@ -149,7 +149,7 @@ const OTPVerificationPage = () => {
         {/* Resend OTP Link */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
-            Didn't receive the OTP?{" "}
+            Didn&apos;t receive the OTP?{" "}
             <button
               className="text-indigo-600 font-medium hover:underline"
               onClick={() => alert("Resend OTP logic goes here")}
