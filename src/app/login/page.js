@@ -8,9 +8,9 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const email = e.target.email.value;
+    const emailOrMobile = e.target.email.value;
     const password = e.target.password.value;
-    login(email, password);
+    login(emailOrMobile, password);
   };
 
   return (
@@ -23,13 +23,13 @@ const LoginPage = () => {
           {/* Email Input */}
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700 font-medium">
-              Email
+              Mobile Number / Email
             </label>
             <input
-              type="email"
+              type="text"
               id="email"
               name="email"
-              placeholder="Enter your email"
+              placeholder="Enter mobile number or email"
               className="w-full px-4 py-2 mt-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
               required
             />

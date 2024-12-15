@@ -38,10 +38,10 @@ export const AuthProvider = ({ children }) => {
     if (document.cookie.replace("authToken=", "")) fetchUser(); // Fetch user on app load
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (emailOrMobile, password) => {
     try {
       const response = await axios.post(`${baseUrl}/auth/login`, {
-        email,
+        emailOrMobile,
         password,
       });
 
