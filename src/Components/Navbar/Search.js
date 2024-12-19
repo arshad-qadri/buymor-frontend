@@ -1,25 +1,31 @@
-"use client"
-import { useRouter ,useSearchParams} from "next/navigation";
+"use client";
+// import useDebounce from "@/context/useDebounce";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 
-const Search = ({}) => {
+const Search = () => {
   const [search, setSearch] = useState("");
   const router = useRouter();
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
   const handleSubmit = (e) => {
     e.preventDefault();
     router.push(`/shop?q=${search}`);
   };
 
   useEffect(() => {
-    const q = searchParams.get("q")
-      // console.log();
-      if(q) {
-        setSearch(q);
-      }
-      
-  },[searchParams])
+    const q = searchParams.get("q");
+    // console.log();
+    if (q) {
+      setSearch(q);
+    }
+  }, [searchParams]);
+  // const debaounceSearch = useDebounce(search, 300);
+  // useEffect(() => {
+  //   if (debaounceSearch) {
+  //     alert(debaounceSearch);
+  //   }
+  // }, [debaounceSearch]);
   return (
     <form className=" mx-4 hidden md:block" onSubmit={handleSubmit}>
       <div className="relative  lg:w-[500px] md:w-[300px]   border border-red-300 rounded-md">
