@@ -51,7 +51,9 @@ export const AuthProvider = ({ children }) => {
         const { token } = res.data;
         document.cookie = `authToken=${token}; path=/`; // Replace 'token' with the correct field name if different
         successToast(res.data?.message);
-        router.push("/");
+        setTimeout(() => {
+          location.href = "/"
+        }, 1000);
       })
       .catch((err) => {
         errorToast(err.response.data?.message || err.message);
