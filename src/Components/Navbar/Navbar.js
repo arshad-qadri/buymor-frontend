@@ -7,20 +7,19 @@ import { FaBarsStaggered } from "react-icons/fa6";
 import { useAuth } from "@/context/AuthContext";
 
 const Navbar = () => {
-  const {user, logout} = useAuth()
+  const { user, logout } = useAuth();
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
   const [dropdownOpen, setDropdownOpen] = useState(false); // State for dropdown visibility
 
   useEffect(() => {
     // Check if the user is logged in (e.g., by checking for authToken in cookies/localStorage)
-    const authToken = document.cookie.includes("authToken"); // Or localStorage.getItem("authToken")
+    const authToken = document.cookie.replace("authToken="); // Or localStorage.getItem("authToken")
     setIsLoggedIn(authToken);
-  }, []);
-
+  }, [user]);
 
   const handleLogout = () => {
     // Handle user logout (clear cookies/localStorage and redirect to login)
-    logout(setIsLoggedIn)
+    logout(setIsLoggedIn);
   };
 
   return (

@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/Components/Navbar/Navbar";
 import Footer from "@/Components/Footer";
 import { AuthProvider } from "@/context/AuthContext";
+import { ToastContainer } from "react-toastify";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
         <AuthProvider>
         <Navbar />
           <div className="min-h-[82vh]">{children}</div>
+          <ToastContainer />
         </AuthProvider>
         <Footer />
       </body>

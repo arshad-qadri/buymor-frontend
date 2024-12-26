@@ -1,14 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { baseUrl } from "@/variable";
 
-const ResetPasswordPage = () => {
+const ResetPasswordPage = ({ params }) => {
   const router = useRouter();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-
+  const { token } = React.use(params);
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setError("");
@@ -19,25 +21,16 @@ const ResetPasswordPage = () => {
       return;
     }
 
-    try {
-      // Perform API call to reset the password using the token
-      const token = new URLSearchParams(window.location.search).get("token");
-      const response = await fetch("/api/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, password }),
+    await axios
+      .post(`${baseUrl}/auth/reset-password/${token}`, { password })
+      .then((res) => {
+        alert(res.data?.message);
+        router.push("/login");
+      })
+      .catch((err) => {
+        alert(err.response.data?.message);
+        console.log(err);
       });
-
-      if (response.ok) {
-        alert("Password reset successful!");
-        router.push("/login"); // Redirect to login page
-      } else {
-        const data = await response.json();
-        setError(data.message || "Something went wrong!");
-      }
-    } catch (err) {
-      setError("Failed to reset password. Please try again later.");
-    }
   };
 
   return (
@@ -49,7 +42,10 @@ const ResetPasswordPage = () => {
         <form onSubmit={handleResetPassword}>
           {/* New Password Input */}
           <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-700 font-medium">
+            <label
+              htmlFor="password"
+              className="block text-gray-700 font-medium"
+            >
               New Password
             </label>
             <input
@@ -65,7 +61,10 @@ const ResetPasswordPage = () => {
 
           {/* Confirm Password Input */}
           <div className="mb-4">
-            <label htmlFor="confirmPassword" className="block text-gray-700 font-medium">
+            <label
+              htmlFor="confirmPassword"
+              className="block text-gray-700 font-medium"
+            >
               Confirm Password
             </label>
             <input

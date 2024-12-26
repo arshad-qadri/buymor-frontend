@@ -1,8 +1,9 @@
 "use client";
 
+import useToast from "@/hooks/useToast";
 import { baseUrl } from "@/variable";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Create Auth Context
@@ -10,10 +11,12 @@ const AuthContext = createContext();
 
 // Provide Auth State Globally
 export const AuthProvider = ({ children }) => {
+  const { successToast, errorToast } = useToast();
   const [user, setUser] = useState(null); // `null` means not logged in
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const [error, setError ] = useState(null);
+  const pathname = usePathname();
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -36,37 +39,26 @@ export const AuthProvider = ({ children }) => {
       }
     };
     if (document.cookie.replace("authToken=", "")) fetchUser(); // Fetch user on app load
-  }, []);
+  }, [pathname]);
 
   const login = async (emailOrMobile, password) => {
-    try {
-      const response = await axios.post(`${baseUrl}/auth/login`, {
+    await axios
+      .post(`${baseUrl}/auth/login`, {
         emailOrMobile,
         password,
-      });
-
-      if (response.status === 200) {
-        const { token } = response.data;
-
-        // Save the token (or any required data) to cookies/localStorage
+      })
+      .then((res) => {
+        const { token } = res.data;
         document.cookie = `authToken=${token}; path=/`; // Replace 'token' with the correct field name if different
-        alert("Login successful!");
-
-        // Redirect to the shop page
-        location.href = "/";
-      } else {
-        alert("Login failed. Please try again.");
-      }
-    } catch (error) {
-      console.log("Error during login:", error);
-      
-      alert(
-        error.response?.data?.message || "An error occurred. Please try again."
-      );
-      if(error.response?.data?.token){
-        location.href = `/verify-mobile-number/${error.response?.data?.token}`
-      }
-    }
+        successToast(res.data?.message);
+        router.push("/");
+      })
+      .catch((err) => {
+        errorToast(err.response.data?.message || err.message);
+        if (err?.response?.data?.token) {
+          location.href = `/verify-mobile-number/${err?.response?.data?.token}`;
+        }
+      });
   };
   const register = async (
     formData,

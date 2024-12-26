@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { baseUrl } from "@/variable";
+import useToast from "@/hooks/useToast";
 
 const OTPVerificationPage = () => {
   const [otp, setOtp] = useState(["", "", "", ""]); // State to store OTP values
@@ -11,36 +12,38 @@ const OTPVerificationPage = () => {
   const [error, setError] = useState(""); // For error messages
   const [success, setSuccess] = useState(false); // Success state
   const router = useRouter();
-  const params = useParams()
+  const params = useParams();
+  const { successToast, errorToast } = useToast();
 
-  const callApi = async ()=>{
+  const callApi = async () => {
     try {
-      const {data} =  await axios.post(`${baseUrl}/auth/send-otp`,{},{
-        headers: {
-          'Authorization': `Bearer ${params.token}`,
+      const { data } = await axios.post(
+        `${baseUrl}/auth/send-otp`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${params.token}`,
+          },
         }
-      })
+      );
 
       console.log("data -- otp", data);
-      alert(data.message)
-      
-      } catch (error) {
-        console.log(error);
-        if(error.response?.data?.message){
-
-          alert(error.response?.data?.message)
-        }else{
-          alert(error.message)
-        }
-        
+      successToast(data.message);
+    } catch (error) {
+      console.log(error);
+      if (error.response?.data?.message) {
+        errorToast(error.response?.data?.message);
+      } else {
+        errorToast(error.message);
       }
-  }
+    }
+  };
 
   useEffect(() => {
-      if (params.token) {
-        callApi()
-      }
-  },[callApi])
+    if (params.token) {
+      callApi();
+    }
+  }, []);
   // Refs for each OTP input field to manage focus
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
@@ -70,31 +73,33 @@ const OTPVerificationPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
-    
+    // setError("");
+
     const otpString = otp.join(""); // Convert OTP array to a string
 
     try {
-      const response = await axios.post(`${baseUrl}/auth/verify-otp`, {
-        otp: otpString,
-      },
-      {headers:{
-        Authorization: `Bearer ${params.token}`
-      }}
-    );
+      const response = await axios.post(
+        `${baseUrl}/auth/verify-otp`,
+        {
+          otp: otpString,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${params.token}`,
+          },
+        }
+      );
 
       if (response.data) {
         setSuccess(true);
         // setTimeout(() => {
-          alert(response.data?.message)
-          return  router.push("/login")
-         ;
-      } else {
-        setError("Invalid OTP. Please try again.");
-      }
+       
+        successToast(response.data?.message)
+        return router.push("/login");
+      } 
     } catch (error) {
-      console.error("Error verifying OTP:", error);
-      setError("There was an error verifying your OTP. Please try again.");
+      errorToast(error.response.data.message || error.message)
+
     } finally {
       setLoading(false);
     }
@@ -113,10 +118,16 @@ const OTPVerificationPage = () => {
         </h1>
 
         {/* Error Message */}
-        {error && <p className="text-red-600 text-center font-medium mb-4">{error}</p>}
+        {error && (
+          <p className="text-red-600 text-center font-medium mb-4">{error}</p>
+        )}
 
         {/* Success Message */}
-        {success && <p className="text-green-600 text-center font-medium mb-4">OTP Verified Successfully!</p>}
+        {success && (
+          <p className="text-green-600 text-center font-medium mb-4">
+            OTP Verified Successfully!
+          </p>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className="flex justify-between my-8">
